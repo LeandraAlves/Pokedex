@@ -1,7 +1,7 @@
 function Footer() {
   return (
     <footer>
-      <p>Desenvolvido por [seu nome] — Programação Frontend — UNIVAS</p>
+      <p>Desenvolvido por Leandra — Programação Frontend — UNIVAS</p>
     </footer>
   )
 }
