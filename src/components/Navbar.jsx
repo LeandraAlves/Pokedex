@@ -1,10 +1,15 @@
+import { NavLink } from "react-router-dom"
+
 function Navbar() {
   return (
     <nav>
-      <a href="#">Início</a>
-      <a href="#">Pokémon</a>
-      <a href="#">Sobre</a>
+        <div>
+          <NavLink to="/" end> Inicio </NavLink>
+          <NavLink to="/pokemon" > Pokémon</NavLink>
+          <NavLink to="/sobre"> Sobre </NavLink>
+        </div>
     </nav>
+    
   )
 }
 
