@@ -1,21 +1,45 @@
 import { Link, useParams } from 'react-router-dom'
-import { getPokemonById } from '../data/pokemons'
+import { useEffect, useState } from 'react'
+import { fetchPokemonById } from '../services/pokemonApi'
 
 function PokemonDetailPage() {
   const { id } = useParams()
-  const pokemon = getPokemonById(id)
+  const [pokemon, setPokemon] = useState(null)  // null, nao []
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  if (!pokemon) {
-    return (
-      <section className="pokemon-detail pokemon-detail--empty">
-        <h2>Pokémon não encontrado</h2>
-        <p>Não existe um Pokémon com o id &quot;{id}&quot; neste catálogo.</p>
-        <Link to="/pokemon" className="pokemon-detail__back">
-          Voltar ao catálogo
-        </Link>
-      </section>
-    )
-  }
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadPokemon() {
+      try {
+        setLoading(true)
+        setError(null)
+        setPokemon(null)         // limpa antes de buscar novo id
+        const data = await fetchPokemonById(id)
+        if (!cancelled) setPokemon(data)
+      } catch (err) {
+        if (!cancelled) setError(err.message ?? 'Erro ao carregar.')
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    loadPokemon()
+    return () => { cancelled = true }
+  }, [id])  // <- roda de novo se o id mudar
+
+
+  if (loading) return <p>Carregando Pokémon...</p>
+  if (error) return <p role="alert">{error}</p>
+  if (!pokemon) return (
+    <>
+      <p>Pokémon "{id}" não encontrado na API.</p>
+      <Link to="/pokemon">Voltar ao catálogo</Link>
+    </>
+  )
+  // ... renderiza os dados normalmente
+
 
   return (
     <section className="pokemon-detail" aria-labelledby="detalhe-titulo">

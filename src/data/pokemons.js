@@ -1,4 +1,4 @@
-export const POKEMONS = [
+/*export const POKEMONS = [
   {
     id: 25,
     name: 'Pikachu',
@@ -32,3 +32,4 @@ export function getPokemonById(id) {
   const numericId = Number(id)
   return POKEMONS.find((p) => p.id === numericId) ?? null
 }
+  */
